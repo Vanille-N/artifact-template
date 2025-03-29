@@ -11,8 +11,6 @@ declare-repo github-public-repo "
   sha=${SHA_GH_HELLO_WORLD_PUBLIC}
 "
 
-# Make sure that the access token you give only provides "api_read" access.
-# A "Maintainer" role is needed, though.
 load-secret TOK_GL_HELLO_WORLD
 load-secret SHA_GL_HELLO_WORLD_PRIVATE
 declare-repo gitlab-private-repo "
@@ -24,9 +22,19 @@ declare-repo gitlab-private-repo "
   sha=${SHA_GL_HELLO_WORLD_PRIVATE}
 "
 
+load-secret SHA_GL_HELLO_WORLD_PUBLIC
+declare-repo gitlab-public-repo "
+  api=gitlab/public
+  url=gitlab.com
+  user=Vanille-N
+  project=hello-world-public
+  sha=${SHA_GL_HELLO_WORLD_PUBLIC}
+"
+
 prepare-download
 unpack gitlab-private-repo gitlab-private
 unpack github-public-repo github-public
+unpack gitlab-public-repo gitlab-public
 finish-download
 
 prepare-archive

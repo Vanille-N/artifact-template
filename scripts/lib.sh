@@ -84,6 +84,8 @@ unpack () {
     ('') echo "Repository $NAME does not have an api declared."; exit 1;;
     (github/public) get-github-public-archive $NAME $DEST;;
     (gitlab/apiv4) get-gitlab-api-archive $NAME $DEST;;
+    (gitlab/public) get-gitlab-public-archive $NAME $DEST;;
+    (*) echo "${REPOS[$NAME:api]} is not one of the supported APIs"; exit 1;;
   esac
 }
 
@@ -145,6 +147,33 @@ get-github-public-archive () {
     URL="https://$SERVER/$USER/$PROJECT/archive/$SHA.tar.gz"
     echo "Fetching from $URL"
     wget -q "$URL"
+  fi
+  echo "Unpacking to folder: $DEST/"
+  tar xf "$SHA.tar.gz"
+  mv "$PROJECT-$SHA" "$DEST"
+  echo
+}
+
+get-gitlab-public-archive () {
+  local NAME=$1
+  local DEST=$2
+  query $NAME url; local SERVER=$ANS
+  query $NAME user; local USER=$ANS
+  query $NAME project; local PROJECT=$ANS
+  query $NAME sha; local SHA=$ANS
+
+  rm -rf "$DEST"
+  echo "Required: $USER/$PROJECT"
+  echo "  at $SHA"
+  echo "  from $SERVER"
+
+  if [ -f "$SHA.tar.gz" ]; then
+    echo "Already downloaded"
+  else
+    URL="https://$SERVER/$USER/$PROJECT/-/archive/$SHA/$PROJECT-$SHA.tar.gz"
+    echo "Fetching from $URL"
+    wget -q "$URL"
+    mv "$PROJECT-$SHA.tar.gz" "$SHA.tar.gz"
   fi
   echo "Unpacking to folder: $DEST/"
   tar xf "$SHA.tar.gz"
