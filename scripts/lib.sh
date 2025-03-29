@@ -53,6 +53,14 @@ declare-repo () {
   done
 }
 
+load-secret () {
+  requires-context none
+  assert-nosplit $1; local FILE=$1
+  ANS=$( head -n1 "SECRETS/$FILE" )
+  # TODO: validation if it doesn't exist
+  eval "$FILE=$ANS"
+}
+
 DOWNLOAD_DIR=data
 
 prepare-download () {
@@ -165,7 +173,7 @@ get-gitlab-api-archive () {
     curl --header "PRIVATE-TOKEN: $TOKEN" -O "$URL"
     mv "archive.tar.gz" "$SHA.tar.gz"
   fi
-  echo "Unpacking to folder: $DEST"
+  echo "Unpacking to folder: $DEST/"
   tar xf "$SHA.tar.gz"
   mv "$PROJECT-$SHA-$SHA" "$DEST"
   echo

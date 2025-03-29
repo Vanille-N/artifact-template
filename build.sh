@@ -2,27 +2,26 @@
 
 . scripts/lib.sh
 
+load-secret SHA_GH_HELLO_WORLD_PUBLIC
 declare-repo github-public-repo "
   api=github/public
   url=github.com
   user=Vanille-N
   project=hello-world-public
-  sha=f9c22e5f181864e8c26a69477185879ee64b6488
+  sha=${SHA_GH_HELLO_WORLD_PUBLIC}
 "
 
 # Make sure that the access token you give only provides "api_read" access.
 # A "Maintainer" role is needed, though.
-# Tip: if you do not wish to expose this token, you can use
-#   token=${TOKEN}
-# and put the token in an environment variable instead of it being hardcoded.
-# In fact, you can do the same for the sha.
+load-secret TOK_GL_HELLO_WORLD
+load-secret SHA_GL_HELLO_WORLD_PRIVATE
 declare-repo gitlab-private-repo "
   api=gitlab/apiv4
   url=gitlab.com
   project=hello-world-private
   pid=68468614
-  token=glpat-tbszUGLZ5tPSykUz1vmU
-  sha=d6082d5524240387ab9acbb33eb4ff23427ab379
+  token=${TOK_GL_HELLO_WORLD}
+  sha=${SHA_GL_HELLO_WORLD_PRIVATE}
 "
 
 prepare-download
