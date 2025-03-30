@@ -61,7 +61,7 @@ load-secret () {
   eval "$FILE=$ANS"
 }
 
-DOWNLOAD_DIR=data
+DOWNLOAD_DIR=_download
 
 prepare-download () {
   requires-context none
@@ -89,10 +89,19 @@ unpack () {
   esac
 }
 
-ARCHIVE_DIR=final
+NTH_ARCHIVE=
+ARCHIVE_DIR=
 
 prepare-archive () {
   requires-context none
+  case "$1" in
+    (_final*) echo "Archive name '_final*' is reserved. Choose something else."; exit 1;;
+    ($DOWNLOAD_DIR) echo "Archive name '$DOWNLOAD_DIR' is reserved. Choose something else."; exit 1;;
+    (*/*) echo "Archive name should not contain '/'."; exit 1;;
+    ('') ARCHIVE_DIR=_final$NTH_ARCHIVE
+         let 'NTH_ARCHIVE++';;
+    (*) assert-nosplit $1; ARCHIVE_DIR=$1
+  esac
   mkdir -p $ARCHIVE_DIR
   cd $ARCHIVE_DIR
   : > md5sums
@@ -102,6 +111,11 @@ prepare-archive () {
 finish-archive () {
   requires-context archive
   cd ..
+  case "$1" in
+    ('+tar') tar czf $ARCHIVE_DIR.tar.gz $ARCHIVE_DIR
+    (*) # TODO: fail gracefully
+      exit 1;;
+  esac
   switch-context none
 }
 
@@ -116,7 +130,7 @@ compress () {
   local LOCATION="$1"
   assert-nosplit $2; local DEST="$2"
   IFS='@'; SPLIT=($LOCATION); unset IFS;
-  local DIR="../data/${SPLIT[1]}"
+  local DIR="../$DOWNLOAD_DIR/${SPLIT[1]}"
   local SRC="${SPLIT[0]}"
 
   tar czf "$DEST.tar.gz" --directory="$DIR" "$SRC"
@@ -127,6 +141,7 @@ build-docker () {
   requires-context archive
   assert-nosplit $1; local CONTAINER=$1
   docker build -t $CONTAINER .
+  # TODO: Don't forget to docker save
 }
 
 get-github-public-archive () {

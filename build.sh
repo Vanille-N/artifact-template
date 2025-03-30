@@ -37,11 +37,12 @@ unpack github-public-repo github-public
 unpack gitlab-public-repo gitlab-public
 finish-download
 
-prepare-archive
+prepare-archive final
 copy README.md
 copy Dockerfile
 compress gitlab-private@. gitlab-private-source
 compress github-public@. github-public-source
 build-docker helloworld
-finish-archive
+# TODO: docker save
+finish-archive +tar
 
