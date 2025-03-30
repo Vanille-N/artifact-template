@@ -8,6 +8,16 @@ assert-nosplit () {
   fi
 }
 
+wf () {
+  local MSG="$1"
+  shift
+  if ! "$@" &> /dev/null; then
+    echo "Assumption failed: $MSG"
+    echo "  at ${FUNCNAME[1]}"
+    exit 1
+  fi
+}
+
 BUILD_PHASE=none
 
 requires-context () {
