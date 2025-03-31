@@ -33,6 +33,7 @@ declare-repo gitlab-public-repo "
 
 prepare-download
 unpack gitlab-private-repo gitlab-private
+# TODO: error if target folder exists
 unpack github-public-repo github-public
 unpack gitlab-public-repo gitlab-public
 finish-download
@@ -40,9 +41,12 @@ finish-download
 prepare-archive final
 copy README.md
 copy Dockerfile
+# TODO: LICENSE
 compress gitlab-private@. gitlab-private-source
+# TODO: validate uniqueness of destination
 compress github-public@. github-public-source
 build-docker helloworld
 # TODO: docker save
 finish-archive +tar
+# TODO: +zip
 
