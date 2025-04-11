@@ -182,6 +182,7 @@ Both of those commands can optionally take additional arguments.
   Different invocations should use different `folder-name`s.
   In what follows we assume the default name.
 - `finish-archive +tar` will additionally build a compressed `_final.tar.gz`.
+- `finish-archive +zip` will additionally build a compressed `_final.zip`.
 
 When in this phase you gain access to the commands below.
 

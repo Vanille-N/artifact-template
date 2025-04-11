@@ -5,7 +5,7 @@
 - `README.md` is the root readme of the artifact.
   This one (`README_META.md`) on the other hand is private.
 - `Dockerfile` is included for reference
-- the source code of any archives declared in `build.sh`, and their `md5sum`.
+- the source code of any archives declared in `build.sh`, and their `sha256sum`.
 
 ## Building the Docker container
 

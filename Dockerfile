@@ -25,5 +25,5 @@ USER user
 ENV LANG=C.UTF-8
 
 WORKDIR /home/user
-RUN : > md5sums
+RUN : > sha256sums
 

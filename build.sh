@@ -47,6 +47,5 @@ compress gitlab-private@. gitlab-private-source
 compress github-public@. github-public-source
 build-docker helloworld
 # TODO: docker save
-finish-archive +tar
-# TODO: +zip
+finish-archive +tar +zip
 
